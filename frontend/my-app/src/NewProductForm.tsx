@@ -1,5 +1,6 @@
-import React, {useState} from "react";
+import React, {useState, FormEvent} from "react";
 import {useNavigate} from "react-router-dom";
+import {apiUrl} from "./api";
 
 export const NewProductForm = () => {
 
@@ -12,10 +13,10 @@ export const NewProductForm = () => {
         const [amount, setAmount] = useState('')
         const [cat, setCat] = useState('')
 
-        const submitNewForm = async (e) => {
+        const submitNewForm = async (e: FormEvent) => {
             e.preventDefault()
             if (!(!productName || !price || !amount || !cat)){
-                await fetch('http://localhost:3001/items/add', {
+                await fetch(`${apiUrl}/items/add`, {
                     method: 'POST',
                     body: JSON.stringify(
                         {
@@ -69,36 +70,6 @@ export const NewProductForm = () => {
 
                         onChange={(e) => setPrice(e.target.value)}
                     />
-                    {/*<span> Product location </span>*/}
-                    {/*<input*/}
-                    {/*    className="addNewFormInput"*/}
-                    {/*    placeholder="lat"*/}
-                    {/*    type={"number"}*/}
-                    {/*    name={lat}*/}
-                    {/*    value={lat}*/}
-
-                    {/*    onChange={(e) => setLat(e.target.value)}*/}
-                    {/*/>*/}
-                    {/*<span>Product location </span>*/}
-                    {/*<input*/}
-                    {/*    className="addNewFormInput"*/}
-                    {/*    placeholder="lon"*/}
-                    {/*    type={"number"}*/}
-                    {/*    name={lon}*/}
-                    {/*    value={lon}*/}
-
-                    {/*    onChange={(e) => setLon(e.target.value)}*/}
-                    {/*/>*/}
-                    {/*<span>Product picture</span>*/}
-                    {/*<input*/}
-                    {/*    className="addNewFormInput"*/}
-                    {/*    placeholder="photo"*/}
-                    {/*    type={"text"}*/}
-                    {/*    name={photo}*/}
-                    {/*    value={photo}*/}
-
-                    {/*    onChange={(e) => setPhoto(e.target.value)}*/}
-                    {/*/>*/}
                     <span>Number of units</span>
                     <input
                         className="addNewFormInput"

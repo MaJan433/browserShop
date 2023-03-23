@@ -1,14 +1,23 @@
-const {pool} = require("./pool");
-const {v4:uuid} = require("uuid")
+import {pool} from "./pool";
+import {v4 as uuid} from "uuid";
 
-class DatabaseFunctions {
+export type updateProductJSON = {
+    productName:string,
+    price: number,
+    lat: number,
+    lon: number,
+    photo: string,
+    amount: number,
+    cat: string
+}
 
+export class DatabaseFunctions {
 
-    static async get_orders(){
+    public static async get_orders(){
         const [result] = await pool.execute('SELECT * FROM `basket_orders`')
         return result
-    }
-    static async update_product(uuid, object){
+    };
+    public static async update_product(uuid: string, object: updateProductJSON){
         const [result] =  await pool.execute('UPDATE `main_table` SET `name`=:name, `price`=:price, `lat`=:lat, `lon`=:lon, `photo`=:photo, `amount`=:amount, `cat`=:cat WHERE `uuid`= :uuid', {
             uuid: uuid,
             name: object.productName,
@@ -18,33 +27,39 @@ class DatabaseFunctions {
             photo: object.photo,
             amount: object.amount,
             cat: object.cat
-        })
-    }
+        });
+    };
 
-    static async item_finder(word, minPrice, maxPrice){
+    public static async item_finder(word:string,
+                             minPrice: number,
+                             maxPrice : number){
         const [rows] = await pool.execute(
             'SELECT * FROM `main_table` WHERE `name` LIKE ? AND `price` >= ? AND `price` <= ?',
             [`%${word}%`, minPrice, maxPrice]
         );
         return rows;
-    }
-    static async select_all() {
+    };
+
+    public static async select_all() {
         const [result] = await pool.execute('SELECT * FROM `main_table`')
         return result
-    }
-    static async show_basket() {
+    };
+
+    public static async show_basket() {
         const [result] = await pool.execute('SELECT * FROM `basket`')
         return result
-    }
-    static async remove_product(uuid){
+    };
+
+    public static async remove_product(uuid: string){
         await pool.execute('DELETE FROM `main_table` WHERE `uuid` = :uuid', {
             uuid: uuid,
         })
     }
+    public static async add_new_product(object: updateProductJSON) {
 
-    static async add_new_product(object) {
-
-        await pool.execute('INSERT INTO `main_table` VALUES(:uuid, :name, :price, :lat, :lon, :photo, :amount, :cat)', {
+        await pool.execute(
+            'INSERT INTO `main_table` VALUES(:uuid, :name, :price, :lat, :lon, :photo, :amount, :cat)',
+            {
             uuid: uuid(),
             name: object.productName,
             price: object.price,
@@ -56,11 +71,15 @@ class DatabaseFunctions {
         })
     }
 
-    static async get_admin_hash() {
+    public static async get_admin_hash() {
         const [hash] = await pool.execute('SELECT `password` FROM `admin_password`')
         return hash
     }
-    static async insert_order(item, amount, price, user, address){
+    public static async insert_order(item: string,
+                                     amount: number,
+                                     price: number,
+                                     user: string,
+                                     address: string){
         await pool.execute('INSERT into `basket_orders` VALUES (:uuid, :item, :amount, :price, :user, :address)', {
             uuid: uuid(),
             item,
@@ -68,10 +87,7 @@ class DatabaseFunctions {
             price,
             user,
             address
-        })
-    }
+        });
+    };
 
-}
-module.exports = {
-    DatabaseFunctions,
-}
+};

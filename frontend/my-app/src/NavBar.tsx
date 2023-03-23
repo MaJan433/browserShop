@@ -1,6 +1,6 @@
 
-import {NavBarButton} from "./NavBarButton";
-import {AdminPanelBttn} from "./AdminPanelBttn";
+import React from 'react';
+import {AdminPanelButton} from "./AdminPanelButton";
 import {Searcher} from "./Searcher";
 import {BasketButton} from "./BasketButton";
 
@@ -13,7 +13,7 @@ export const NavBar = () => {
                 <Searcher/>
             </div>
             <div className="AdminPanelDiv">
-                <AdminPanelBttn/>
+                <AdminPanelButton/>
             </div>
 
             <div className="BasketDiv">

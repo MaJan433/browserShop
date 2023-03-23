@@ -1,26 +1,43 @@
+import React from "react";
 import {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
+import {apiUrl} from "./api";
+
+interface Order {
+    uuid: string;
+    product: string;
+    amount: number;
+    unit_price: number;
+    customer: string;
+    address: string;
+}
+interface OrdersObject {
+    [customer: string]: Order[];
+}
 
 export  const OrderChecker = () => {
 
-    const [data, setData] = useState('')
+    const [data, setData] = useState<Order[]>([{uuid:"79ba8a90-160b-4c3c-aa83-b29d8a64ac5d",product:"Guma balonowa ",amount:3,unit_price:5.5,customer:"Jan",address:"Zamkowa"}])
     const navigate = useNavigate()
 
     useEffect( () => {
         (async () => {
-            const res = await fetch('http://localhost:3001/orders')
+            const res = await fetch(`${apiUrl}/orders`)
             const data = await res.json()
             setData(data)
         })();
     },[]);
 
 
-    const ordersObject = {}
-    for (let row of data){
-        if (ordersObject[row.customer]){
-            ordersObject[row.customer].push(row)
-        } else {
-            ordersObject[row.customer] = [row]
+    const ordersObject : OrdersObject = {}
+
+        for (let row of data) {
+            if (row && data) {
+            if (ordersObject[row.customer]) {
+                ordersObject[row.customer].push(row)
+            } else {
+                ordersObject[row.customer] = [row]
+            }
         }
     }
     const ordersArray = Object.entries(ordersObject)

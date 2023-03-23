@@ -1,7 +1,10 @@
-import react, {useEffect, useState} from "react";
+import React from 'react';
+import {useEffect, useState, FormEvent} from "react";
 import {useCookies} from "react-cookie";
 import {useNavigate} from "react-router-dom"
 import {ExchangeRate} from "./ExchangeRate";
+import './jpgExt'
+import {apiUrl} from "./api";
 
 
 
@@ -15,7 +18,7 @@ export const Basket = () => {
 
     useEffect(() => {
         (async () => {
-            const res = await fetch('http://localhost:3001/basket');
+            const res = await fetch(`${apiUrl}/basket`);
             const data = await res.json();
             setBasket(data)
         })();
@@ -36,9 +39,15 @@ export const Basket = () => {
             </>
         )
     }
+    type ProductDetails = {
+        amount: number;
+        unitPrice: string;
+        maxAmount?: number;
+        photo?: string
+    };
 
-    const basketArr = Object.entries(cookies.basketCookie) ? Object.entries(cookies.basketCookie) : []
-
+    type BasketItem = [string, ProductDetails];
+    const basketArr: BasketItem[] = Object.entries(cookies.basketCookie) ? Object.entries(cookies.basketCookie) : []
     const total = basketArr.reduce((acc, curr) => {
         const [productName, productDetails] = curr;
             const productTotal = productDetails.amount * parseFloat(productDetails.unitPrice.replace(',', '.'));
@@ -46,24 +55,27 @@ export const Basket = () => {
 
     }, 0);
 
-    const basketItems = basketArr.map(basketItem => (
-        <div key={basketItem[0]} className="tutaj">
-            <span>{basketItem[0]}</span> amount:  <span>{basketItem[1]}</span>
-        </div>
-    ));
-
-    const sendOrderToDatabase  = async (e) => {
+    const sendOrderToDatabase  = async (e: FormEvent) => {
         e.preventDefault()
         if (user === '' || userAddress === ''){
             alert('User name and address are mandatory!')
             return;
         }
-        const _tempObject = {}
+        interface tempObject {
+            basketCookie: {},
+            user: string,
+            address: string
+        }
+        const _tempObject: tempObject = {
+            basketCookie: {},
+            user: '',
+            address: ''
+        }
         _tempObject.basketCookie = cookies.basketCookie
         _tempObject.user = user
         _tempObject.address = userAddress
 
-        const res = await fetch('http://localhost:3001/addOrder', {
+        const res = await fetch(`${apiUrl}/addOrder`, {
             method: 'POST',
             body: JSON.stringify(_tempObject),
             headers: {
@@ -75,13 +87,13 @@ export const Basket = () => {
         navigate('/')
 
     };
-    const importedImages = {}
+    const importedImages: any = {}
     for (let i=0; i < basketArr.length; i++){
         importedImages[basketArr[i][0]] = require(`./${basketArr[i][1].photo}`)
     }
 
-    const increaseAmount = (key) => {
-        // console.log(cookies.basketCookie[key], )
+    const increaseAmount = (key: string) => {
+
         if (cookies.basketCookie[key].amount < Number(cookies.basketCookie[key].maxAmount)){
         console.log(cookies.basketCookie[key].amount, Number(cookies.basketCookie[key].maxAmount))
             const newAmount = cookies.basketCookie[key].amount + 1
@@ -93,7 +105,7 @@ export const Basket = () => {
         }
     }
 
-    const decreaseAmount = (key) => {
+    const decreaseAmount = (key: string) => {
         if (cookies.basketCookie[key].amount > 0){
             const newAmount = cookies.basketCookie[key].amount - 1
             const newCookie = cookies.basketCookie
@@ -106,9 +118,9 @@ export const Basket = () => {
     const divs = basketArr.map((arr) => {
         if (Number(arr[1].amount) > 0) {
             return <div key={arr[0]}
-                        price={arr[1].unitPrice}
-                        amount={arr[1].amount}
-                        photo={arr[1].photo}
+                        data-price={arr[1].unitPrice}
+                        data-amount={arr[1].amount}
+                        data-photo={arr[1].photo}
                         className="basketItem"
             >
                 <div className="basketImageText">

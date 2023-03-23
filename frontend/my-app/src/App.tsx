@@ -1,4 +1,5 @@
 import './App.css';
+import React from 'react'
 import {Grid} from "./Grid";
 import {NavBar} from "./NavBar";
 import {CategoriesSelector} from "./CategoriesSelector";

@@ -1,14 +1,17 @@
-import React, {useEffect, useState} from 'react'
+import React from 'react';
+import {useEffect, useState} from 'react'
 import {CreateAdminTableRow} from "./CreateAdminTableRow";
 import {useNavigate} from "react-router-dom";
+import {apiUrl} from "./api";
+import {submitFormObject} from "./UpdateProductForm";
 
 export const AdminTable = () => {
 
         const navigate = useNavigate()
-        const [table, setTable] = useState(null);
+        const [table, setTable] = useState<submitFormObject[] | null>(null);
         useEffect( () => {
             (async () => {
-                const res = await fetch('http://localhost:3001/items');
+                const res = await fetch(`${apiUrl}/items`);
                 const data = await res.json();
                 setTable(data)
             })();
@@ -27,8 +30,6 @@ export const AdminTable = () => {
                         <th>uuid</th>
                         <th>Name</th>
                         <th>Price</th>
-                        {/*<th>lat</th>*/}
-                        {/*<th>lon</th>*/}
                         <th>Photo</th>
                         <th>Amount</th>
                         <th>Category</th>

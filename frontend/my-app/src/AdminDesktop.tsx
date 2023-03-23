@@ -1,3 +1,4 @@
+import React from 'react';
 import {useNavigate} from "react-router-dom";
 
 export const AdminDesktop = () => {
@@ -23,10 +24,10 @@ export const AdminDesktop = () => {
     return (
         <>
             <hr/>
-        <button className="button-32" onClick={addNewProductFunction}>Add new product</button>
-        <button className="button-32" onClick={checkProductsFunction}>Check products</button>
-        <button className="button-32" onClick={checkOrdersFunction}>Check orders</button>
-        <button className="button-32" onClick={returnToMainPage}> Return to main page</button>
+        <span className="button-32" onClick={addNewProductFunction}>Add new product</span>
+        <span className="button-32" onClick={checkProductsFunction}>Check products</span>
+        <span className="button-32" onClick={checkOrdersFunction}>Check orders</span>
+        <span className="button-32" onClick={returnToMainPage}> Return to main page</span>
         </>
     )
 }

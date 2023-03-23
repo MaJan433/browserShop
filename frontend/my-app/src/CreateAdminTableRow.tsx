@@ -1,8 +1,23 @@
-import React from "react";
+import {apiUrl} from "./api";
+import React from 'react';
 
-export const CreateAdminTableRow = (props) => {
+interface Props {
+    result: {
+        uuid: string,
+        name?: string,
+        price: number,
+        lat: number,
+        lon: number,
+        photo: string,
+        amount: number,
+        cat: string
+    }
+}
+
+
+export const CreateAdminTableRow = (props: Props) => {
     const removal = async () => {
-        await fetch(`http://localhost:3001/items/${props.result.uuid}`, {
+        await fetch(`${apiUrl}/items/${props.result.uuid}`, {
             method: 'DELETE',
         });
     }
@@ -12,8 +27,6 @@ export const CreateAdminTableRow = (props) => {
             <td>{props.result.uuid}</td>
             <td>{props.result.name}</td>
             <td>{(props.result.price).toFixed(2)}</td>
-            {/*<td>{props.result.lat}</td>*/}
-            {/*<td>{props.result.lon}</td>*/}
             <td>{props.result.photo}</td>
             <td>{props.result.amount}</td>
             <td>{props.result.cat}</td>

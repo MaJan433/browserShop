@@ -1,17 +1,21 @@
-import {useContext, useState,} from "react";
+import React from 'react';
+import {useContext, useState, FormEvent} from "react";
 import {SearchContext} from "./SearchContext";
 
 export const Searcher = () => {
 
-    const {search, setSearch, minPrice,setMinPrice,maxPrice,setMaxPrice} = useContext(SearchContext)
+    const {setSearch,setMinPrice,setMaxPrice} = useContext(SearchContext)
     const [searchValue, setSearchValue] = useState('')
     const [minPriceValue, setMinPriceValue] = useState(0)
     const [maxPriceValue, setMaxPriceValue] = useState(Number.MAX_SAFE_INTEGER)
 
-    const addSearchEntryToGlobalVariables = async (e) => {
+    const addSearchEntryToGlobalVariables = async (e: FormEvent) => {
         e.preventDefault()
+        // @ts-ignore
         setSearch(searchValue)
+        // @ts-ignore
         setMaxPrice(maxPriceValue)
+        // @ts-ignore
         setMinPrice(minPriceValue)
     }
 
@@ -19,7 +23,7 @@ export const Searcher = () => {
             <div className="searcherDiv">
                 <form className="searcherForm">
                     <input value={searchValue}
-                        onChange={(e) => setSearchValue(e.target.value)}
+                        onChange={(e) => setSearchValue(String(e.target.value))}
                         placeholder="What are you looking for?"
                     />
                     <input
